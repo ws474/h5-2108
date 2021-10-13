@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02.jQuery选择器</title>
+</head>
+<body>
+    <div class="box">
+        <h1>02.jQuery选择器</h1>
+        <ul>
+            <li>data1</li>
+            <li>data2</li>
+            <li>data3</li>
+            <li>data4</li>
+        </ul>
+    </div>
+    <ul>
+        <li>test</li>
+    </ul>
+    <script src="./js/jquery-3.1.1.js"></script>
+    <script>
+        // document.querySelector('.box');
+        // document.getElementsByClassName('box')
+        // jQuery('.box')
+        const box = $('.box'); // [element,element,element]
+        console.log('box',box)
+
+        jQuery('h1'); // 返回一个实例
+
+        // 获取ul
+        $('.box ul')
+
+        // 获取第3个li
+        $('.box ul li:nth-child(3)')
+        $('.box ul li:eq(2)')
+        $('.box ul li').eq(2)
+    </script>
+</body>
+</html>

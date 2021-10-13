@@ -1,0 +1,13 @@
+.price del {
+    color: #666;
+    margin-right: 5px;
+}
+
+.price span {
+    color: #f00;
+}
+
+.price del::before,
+.price span::before {
+    content: '￥'
+}

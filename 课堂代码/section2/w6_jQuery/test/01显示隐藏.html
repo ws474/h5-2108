@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>显示隐藏效果</title>
+	<style>
+		.box{display:inline-block;border:5px solid #ff0;}
+		.box img{display:block;}
+		.hide{
+			display: none;
+		}
+	</style>
+	<!-- 1、引入jquery类库 -->
+	<script src="../jquery-1.12.0.js"></script>
+	<script>
+		// 2、$(document).ready()
+		$(function(){
+			// 3、选择页面元素，并进行操作
+
+			// 原生写法
+			/*var box = document.querySelector('.box');
+			var btn = document.querySelector('#btn');
+
+			var visibility = true;
+			btn.onclick = function(){
+				if(visibility){
+					box.style.display = 'none';
+				}else{
+					box.style.display = 'inline-block';
+				}
+				visibility = !visibility;
+			}*/
+
+			// jquery写法
+			/*var visibility = true;
+			$('#btn').click(function(){
+				if(visibility){
+					$('.box').css('display','none');
+				}else{
+					$('.box').css('display','inline-block');
+				}
+				visibility = !visibility;
+			});*/
+
+			// jquery写法2
+			/*$('#btn').click(function(){
+				if($('.box').css('display') == 'none'){
+					$('.box').show();
+				}else{
+					$('.box').hide();
+				}
+			});*/
+
+			// jquery写法3
+			/*$('#btn').click(function(){
+				// toggle()：显示隐藏状态切换
+				// 当.box显示时，隐藏；
+				// 当.box隐藏时，显示
+				$('.box').toggle();
+
+			});*/
+
+			// jquery写法4
+			/*$('#btn').click(function(){
+
+				// 判断是否拥有某个类
+				if($('.box').hasClass('hide')){
+					// 移除类
+					$('.box').removeClass('hide');
+				}else{
+					// 添加类
+					$('.box').addClass('hide');
+				}
+			});
+*/
+			// jquery写法4
+			$('#btn').click(function(){
+				$('.box').toggleClass('hide');
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="box">
+		<img src="images/3.jpg">
+	</div>
+	<p>
+		<button id="btn">显示/隐藏</button>
+	</p>
+</body>
+</html>

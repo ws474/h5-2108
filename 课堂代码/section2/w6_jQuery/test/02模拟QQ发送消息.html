@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>模拟QQ发送消息</title>
+	<style>
+		ul{list-style: none;padding:0;margin:0;}
+		.container{margin:0 auto;padding:50px;width:800px;}
+		.list{margin-bottom:15px;line-height:2;}
+		.list li{border-bottom:1px dotted #ccc;}
+		.container textarea{display:block;min-height:120px;width:100%;}
+	</style>
+	<script src="js/jquery-3.1.1.js"></script>
+	<script>
+		$(function(){
+			var $btnSend = $('#btnSend');
+			var $msg = $btnSend.prev();
+			var $list = $('.list');
+			$btnSend.on('click',sendMsg);
+
+			$msg.on('keyup',function(e){
+				// 判断是否按下ctrl+enter键
+				if(e.keyCode == 13 && e.ctrlKey){
+					sendMsg()
+				}
+			});
+
+			function sendMsg(){
+				var msg = $msg.val();
+				$('<li/>').html(msg).appendTo($list);
+				$msg.val('');
+			}
+		});
+	</script>
+</head>
+<body>
+	<div class="container">
+		<h1>模拟QQ发送消息</h1>
+		<ul class="list">
+		</ul>
+		<textarea></textarea><button id="btnSend">发送</button>
+	</div>
+</body>
+</html>

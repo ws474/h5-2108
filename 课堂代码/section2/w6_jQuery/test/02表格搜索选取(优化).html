@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>表格选取</title>
+	<style>
+		body{padding:50px;}
+		.datalist{
+			border:1px solid #ccc;
+			width:100%;
+			border-collapse: collapse;
+		}
+		.datalist td,.datalist th{padding:5px 10px;border:1px solid #ccc;}
+		.datalist tr.even{background-color:#efefef;}
+		.datalist tr.selected{background-color:#fc0;color:#fff;}
+
+		/*.datalist tr:nth-child(even){background-color:#efefef;}*/
+	</style>
+	<script src="js/jquery-3.1.1.js"></script>
+	<script>
+		$(function(){
+			// tbody下的所有tr
+			var $tbody = $('.datalist tbody');
+			var $trs = $tbody.find('tr');
+
+			// 隔行换色
+			$('.datalist tbody tr:odd').addClass('even');
+
+			// $('.datalist tbody tr:first').addClass('selected');
+			var $keyword = $('#keyword');
+			var $btnSelect = $keyword.next();
+
+			// 所有复选框的数量
+			var checkboxLen = $tbody.find(':checkbox').length;
+
+			$btnSelect.click(function(){
+				var _keyword = $keyword.val();//'李宇春'
+
+				// 筛选出包含奥巴马的行
+				// $('.datalist tbody tr:contains(' + _keyword + ')').addClass('selected').find(':checkbox').prop('checked',true)
+				$trs.filter(':contains(' + _keyword + ')').addClass('selected').find(':checkbox').prop('checked',true)
+			})
+
+			// 点击任意单元格选择当前行
+			$trs.click(function(){
+				$(this).toggleClass('selected').find(':checkbox').prop('checked',$(this).hasClass('selected'));
+
+				// 点击时获取选中的复选框的数量
+				changeAllStatus();
+			});
+
+			// 全选/不选
+			$('#all').click(function(){
+				$trs[this.checked?'addClass':'removeClass']('selected').find(':checkbox').prop('checked',this.checked);
+			}).on('mouseup',function(){
+				console.log(this.checked)
+			})
+
+			// 反选
+			$('#btnFx').click(function(){
+				$trs.toggleClass('selected').find(':checkbox').prop('checked',function(idx,oldval){
+					return !oldval;
+				});
+
+				// 点击时获取选中的复选框的数量
+				changeAllStatus();
+			});
+
+			function changeAllStatus(){
+				var checkedLen = $tbody.find(':checkbox:checked').length;
+				$('#all').prop('checked',checkedLen==checkboxLen);
+			}
+
+		})
+	</script>
+</head>
+<body>
+	<button id="btnFx">反选</button>
+	<input type="text" id="keyword"><button>选择</button>
+	<table class="datalist">
+		<thead>
+			<tr>
+				<th width="20"><input type="checkbox" id="all"></th>
+				<th width="10">#</th>
+				<th>姓名</th>
+				<th>昵称</th>
+				<th>年龄</th>
+				<th>性别</th>
+				<th>是否单身</th>
+				<th>爱好</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="checkbox" name="check"></td>
+				<td>1</td>
+				<td>关羽</td>
+				<td>关二哥</td>
+				<td>49</td>
+				<td>男</td>
+				<td>否</td>
+				<td>装逼</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="check"></td>
+				<td>2</td>
+				<td>张飞</td>
+				<td>张三</td>
+				<td>45</td>
+				<td>男</td>
+				<td>是</td>
+				<td>喝酒</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="check"></td>
+				<td>3</td>
+				<td>赵云</td>
+				<td>赵四</td>
+				<td>33</td>
+				<td>男</td>
+				<td>是</td>
+				<td>跳舞</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="check"></td>
+				<td>4</td>
+				<td>奥巴马</td>
+				<td>小黑</td>
+				<td>56</td>
+				<td>男</td>
+				<td>否</td>
+				<td>打篮球，段子</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="check"></td>
+				<td>5</td>
+				<td>李宇春</td>
+				<td>春哥</td>
+				<td>30</td>
+				<td>女</td>
+				<td>是</td>
+				<td>唱歌</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="check"></td>
+				<td>6</td>
+				<td>岳云鹏</td>
+				<td>小月月</td>
+				<td>32</td>
+				<td>男</td>
+				<td>否</td>
+				<td>相声，段子，唱歌</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

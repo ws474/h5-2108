@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>复制到购物车</title>
+    <style>
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .cart-list {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        width: 200px;
+        /*height: 400px;*/
+        border: 1px solid #ddd;
+        /*overflow-y:auto;*/
+    }
+    
+    .cart-list h4 {
+        margin: 0;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .cart-list img {
+        width: 60px;
+    }
+
+    .cart-list li{position:relative;height:200px;}
+    .cart-list .btn-close{position:absolute;top:0;right:0;padding:5px;}
+    .cart-list .btn-close:hover{background-color:#f00;color:#fff;}
+    
+    .goods-list img {
+        width: 200px;
+    }
+    </style>
+   
+</head>
+
+<body>
+    <div class="goods-list">
+        <h4>产品列表</h4>
+        <ul>
+            <li><img src="img/g1.jpg">
+                <p>
+                    <button>添加到购物车</button>
+                </p>
+                <p>亚瑟士ASICS跑步鞋2015春夏新款运动鞋男款避震跑鞋KAYANO T4H2N-9001 橙色/白色 42</p>
+            </li>
+            <li><img src="img/g2.jpg">
+                <p>
+                    <button>添加到购物车</button>
+                </p>
+                <p>亚瑟士ASICS运动鞋2015春夏新款跑步鞋女鞋稳定跑鞋KAYANO T4H7N-0701 黄色/白色 37.5</p>
+            </li>
+            <li><img src="img/g3.jpg">
+                <p>
+                    <button>添加到购物车</button>
+                </p>
+                <p>亚瑟士ASICS跑步鞋春夏透气稳定女款跑鞋 KAYANO T4N5N-3591 玫红色/黑色 37.5</p>
+            </li>
+            <li><img src="img/g4.jpg">
+                <p>
+                    <button>添加到购物车</button>
+                </p>
+                <p>亚瑟士ASICS高帮运动休闲鞋男鞋运动鞋DOUBLEH54XJ-5050 黑色/黑色 40.5</p>
+            </li>
+            <li><img src="img/g5.jpg">
+                <p>
+                    <button>添加到购物车</button>
+                </p>
+                <p>Onitsuka Tiger运动休闲鞋女COLORADO D4S6N-1850 珊瑚色/淡灰色 37.5</p>
+            </li>
+        </ul>
+    </div>
+    <div class="cart-list">
+        <h4>购物车列表</h4>
+        <ul>
+        </ul>
+    </div>
+
+    <script src="js/jquery-3.1.1.js"></script>
+   <script>
+       jQuery(function($){
+            /*
+                购买商品飞入购物车的效果
+                    1）给按钮绑定点击事件
+                        1>复制当前商品图片(目的：用于实现动画效果)
+                            * 把复制的图片写入页面，并设置样式
+                            * 动画效果
+                    2）动画效果完成
+                        1>复制当前商品所有信息(目的：于往购物车添加)
+                            * 删除购物车中的“添加到购物车”按钮
+                        2>在购物车列表中添加移除按钮
+                        3)删除用于动画的图片
+                    3）删除购物车商品
+                        点击按钮时，删除购物车中对应的商品
+             */
+            const $cartlist = $('.cart-list ul')
+            
+             // 事件绑定（事件委托）
+            $('.goods-list').on('click','button',function(e){
+                // 使用事件委托后，事件处理函数中的this指向事件源对象
+                
+                // 复制当前商品并写入购物车
+                // 获取当前按钮对应的li
+                const $currentLi = $(this).parents('li')
+
+                // 复制当前li
+                const $copyLi = $currentLi.clone()
+                // 删除多余的按钮
+                $copyLi.find('button').remove()
+                // 添加删除按钮
+                $copyLi.append($('<span/>').html('&times;').addClass('btn-close'))
+
+                // 实现飞入动画（复制当前商品图片）
+                const $currentImg = $currentLi.find('img');
+                const $copyImg = $currentImg.clone()
+
+                // console.log($currentImg.position(),$currentImg.offset())
+                // 设置动画初始值
+                $copyImg.css({
+                    position:'absolute',
+                    left:$currentImg.offset().left,
+                    top:$currentImg.offset().top,
+                    width:$currentImg.width(),
+                    height:$currentImg.height()
+                })
+                $currentLi.append($copyImg)
+                $copyImg.animate({
+                    // 动画目标值
+                    left:$cartlist.offset().left,
+                    top:$cartlist.offset().top + $cartlist.outerHeight(),
+                    width:60,
+                    height:60
+                },function(){
+                    // 把复制的li写入购物车
+                    $cartlist.append($copyLi)
+
+                    // 删除动画图片
+                    $copyImg.remove()
+                })
+
+                
+            })
+
+            // 删除购物车商品
+            $cartlist.on('click','.btn-close',function(){
+                const $currentLi = $(this).closest('li')
+
+                $currentLi.remove();
+            })
+
+       });
+   </script>
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>首页</title>
+    <link rel="stylesheet" href="./css/common.css" />
+    <style>
+        li {
+            list-style: none;
+        }
+
+        #goodslist li {
+            float: left;
+            width: 200px;
+            height: 460px;
+            margin: 10px;
+        }
+
+        #goodslist li img {
+            width: 100%;
+        }
+
+        
+    </style>
+</head>
+
+<body>
+    <h1>商品列表</h1>
+    <select id="category">
+
+    </select>
+    <div id="goodslist">
+
+    </div>
+    <script src="./utils/tools.js"></script>
+    <script>
+        /*  
+            接口文档：https://easydoc.net/s/58934052
+                > 接口文档一般由后端开发工程师编写，但需要每个前端开发人员会使用接口文档
+            * 商品列表
+                * 地址（数据地址）：http://120.76.247.5:2003/api/goods
+            * 商品分类
+                * 地址：http://120.76.247.5:2003/api/category
+
+            * 前后端数据格式：字符串
+                * json
+                * xml（了解）
+            
+        */
+
+        const goodslist = document.querySelector('#goodslist')
+        const category = document.querySelector('#category')
+
+        // 获取商品列表
+        // const xhr = new XMLHttpRequest();
+        // xhr.onload = function(){
+        //     // console.log(xhr.responseText);
+        //     const {data} = JSON.parse(xhr.responseText)
+        //     console.log('data=',data)
+
+        //     // 渲染到页面
+        //     // [{},{},{}] -> ['<li><li>','<li><li>','<li><li>']
+        //     const lis = data.result.map(item=>{
+        //         // item:每一条数据
+        //         return `<li>
+        //             <img src="http://120.76.247.5:2003${item.img_url}" />
+        //             <h4>${item.goods_name}</h4>
+        //             <p>分类：${item.category}</p>
+        //             <p class="price"><del>${item.price}</del><span>${item.sales_price}</span></p>
+        //         </li>`
+        //     })
+
+        //     goodslist.innerHTML = lis.join('')
+        // }
+        // xhr.open('get','http://120.76.247.5:2003/api/goods?category=女士表',true);
+        // xhr.send();
+        const goodslistHandle = function ({data}) {
+            const lis = data.result.map(item => {
+                // item:每一条数据
+                return `<li class="goods" data-id="${item._id}" data-my-age="18" data-username="laoxie">
+                    <a href="goods.html?id=${item._id}"><img src="http://120.76.247.5:2003${item.img_url}" /></a>
+                    <h4>${item.goods_name}</h4>
+                    <p>分类：${item.category}</p>
+                    <p class="price"><del>${item.price}</del><span>${item.sales_price}</span></p>
+                </li>`
+            })
+
+            goodslist.innerHTML = lis.join('')
+
+            
+        }
+        request('/goods?category='+category.value, goodslistHandle)
+
+        // 点击进入商品详情页
+        // goodslist.onclick = function({target}){
+        //     if(target.tagName === 'IMG'){
+        //         // 获取点击商品id
+        //         const currentLi = target.parentElement;
+        //         // const id = currentLi.getAttribute('data-id');
+        //         // dataset: 自定义属性集合
+        //         // console.log(currentLi.dataset)
+        //         const {id} = currentLi.dataset
+        //         location.href="goods.html?id="+id
+        //     }
+        // }
+
+
+        // 获取商品分类
+        // const xhr_category = new XMLHttpRequest();
+        // xhr_category.onload = function () {
+        //     const { data } = JSON.parse(xhr_category.responseText)
+        //     console.log('category=', data)
+
+        //     category.innerHTML = data.result.map(item => {
+        //         return `<option value="${item.text}">${item.text}</option>`
+        //     }).join('')
+        // }
+        // xhr_category.open('get', 'http://120.76.247.5:2003/api/category', true)
+        // xhr_category.send()
+        request('/category',({data})=>{
+            category.innerHTML = data.result.map(item => {
+                return `<option value="${item.text}">${item.text}</option>`
+            }).join('')
+            request('/goods?category='+category.value, goodslistHandle)
+        })
+
+
+        // 根据分类显示相应的数据
+        category.onchange = function () {
+            const cat = this.value;
+            console.log('cat', cat)
+
+            // xhr.open('get', 'http://120.76.247.5:2003/api/goods?category=' + cat, true);
+            // xhr.send();
+            request('/goods?category='+cat,goodslistHandle)
+
+            // const data = request('/goods?category='+cat)
+        }
+    </script>
+</body>
+
+</html>

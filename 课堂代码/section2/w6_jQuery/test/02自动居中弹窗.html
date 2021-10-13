@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>居中弹窗</title>
+    <style>
+    body{padding-top:1000px;}
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .popover{display:none;position:absolute;left:200px;top:100px;width:300px;height:200px;border:1px solid #ccc;background-color:#fff;}
+    .popover .title{height:50px;line-height:50px;padding:0 10px;background:linear-gradient(#fff, #efefef 5%, #ddd);}
+    .popover .content{padding:15px;}
+    .popover .footer{position:absolute;left:0;bottom:0;right:0;padding:20px;text-align:center;}
+    .footer button{display:inline-block;margin:0 5px;padding:5px 15px;border:1px solid #ddd;background:linear-gradient(#efefef, #cfcfcf);}
+    </style>
+    <script src="js/jquery-3.1.1.js"></script>
+    <script>
+        // 即时提示信息
+        $(function() {
+            $('#addPop').click(function(e){
+                $('.popover').show().css(getPosition($('.popover')));
+                e.preventDefault();
+            });
+
+            // 窗口滚动事件
+            $(window).scroll(function(){
+                $('.popover').stop().animate(getPosition($('.popover')));
+            })
+
+            // 改变窗口大小触发事件
+            // resize可以绑定在任何元素上
+            .resize(function(){
+                $('.popover').stop().animate(getPosition($('.popover')));
+            });
+
+            function getPosition($obj){
+                return {
+                    left:($(window).width() - $obj.outerWidth())/2 + $(window).scrollLeft(),
+                    top:($(window).height() - $obj.outerHeight())/2 + $(window).scrollTop()
+                }
+            }
+    });
+    </script>
+</head>
+
+<body>
+    <a href="#" id="addPop">弹窗</a>
+    <div class="popover">
+        <div class="title">弹窗标题</div>
+        <div class="content">弹窗内容</div>
+        <div class="footer">
+            <button class="ok">确认</button>
+            <button class="close">关闭</button>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品页面</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="./assets/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <style>
+        .goodslist img {
+            width: 100%;
+        }
+
+        .logout {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-smartwatch"></i>
+                一表人才
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="bi bi-house"></i>
+                            首页
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="discover.html">
+                            <i class="bi bi-vinyl"></i>
+                            发现
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">
+                            <i class="bi bi-cart2"></i>
+                            购物车
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex login">
+
+                    <a class="nav-link" href="login.html">登录</a>
+                    <a class="nav-link" href="reg.html">注册</a>
+                </div>
+                <div class="d-flex logout">
+                    <i class="bi bi-person navbar-text"></i>
+                    <span class="navbar-text"></span>
+                    <a class="nav-link" href="#">退出</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="goods-page">
+            <div id="detail"></div>
+            <button class="btn btn-danger btn-lg btnAdd2cart">
+                <i class="bi bi-cart2"></i>
+                添加购物车
+            </button>
+            <button class="btn btn-warning btn-lg btnBuynow">
+                <i class="bi bi-bucket"></i>
+                立即购买
+            </button>
+
+            <h4 class="mt-5">相关商品</h4>
+            <div class="goodslist row align-items-center">
+
+            </div>
+        </div>
+
+    </div>
+    <script src="./js/bootstrap.js"></script>
+    <script src="./utils/request.js"></script>
+    <script src="./js/common.js"></script>
+    <script>
+        const detail = document.querySelector('#detail')
+        const goodslist = document.querySelector('.goodslist')
+        const btnAdd2cart = document.querySelector('.btnAdd2cart')
+        const btnBuynow = document.querySelector('.btnBuynow')
+
+        // 当前商品
+        let goods;
+
+        // 购物车信息
+        // 进入页面先从本地存储中获取购物车商品列表
+        let cartlist = JSON.parse(localStorage.getItem('cartlist')) || []
+        console.log('cartlist=',cartlist)
+
+        // @页面JS
+        // 页面请求数据
+        const params = new URLSearchParams(location.search);
+        const id = params.get('id')
+        console.log('id=', id)
+        request({
+            url: '/goods/' + id,
+        }).then(({ data }) => {
+            goods = data;
+            console.log('data=', data)
+
+            detail.innerHTML = `
+            <img src="${data.img_url}" />
+            <h1>${data.goods_name}</h1>
+            <p>分类：${data.category}</p>
+            <p class="price"><del>${data.price}</del><span>${data.sales_price}</span></p>
+          `
+
+
+            // 获取相关商品
+            request({
+                url: '/goods/list',
+                data: {
+                    category: data.category
+                }
+            }).then(({ data }) => {
+                console.log('data=', data)
+
+                goodslist.innerHTML = data.map(item => {
+                    return `
+              <div class="col-sm-4 col-md-3 col-lg-2">
+                  <a href="goods.html?id=${item._id}"><img src="${item.img_url}" /></a>
+                    <h4 class="fs-5">${item.goods_name}</h4>
+                    <p>分类：${item.category}</p>
+                    <p class="price"><del>${item.price}</del><span>${item.sales_price}</span></p>
+              </div>
+            `
+                }).join('')
+            })
+        })
+
+        // 添加购物车
+        // 把当前商品信息存入本地存储localStorage
+        btnAdd2cart.onclick = function(){
+            const {_id,goods_name,price,sales_price,img_url} = goods
+
+            // 判断当前商品是否存在购物中
+            // 存在：数量+1
+            // 不存在：添加
+            const currentGoods = cartlist.find(item=>item._id===_id)
+            if(currentGoods){
+                currentGoods.qty += 1
+            }else{
+                cartlist.unshift(
+                    {_id,goods_name,price,sales_price,img_url,qty:1}
+                );
+
+            }
+            localStorage.setItem('cartlist',JSON.stringify(cartlist))
+        }
+    </script>
+</body>
+
+</html>

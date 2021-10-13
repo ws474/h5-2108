@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <style>
+        .logout{display: none;}
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row mt-3">
+            <div class="col-6">
+                logo
+            </div>
+            <div class="col-6" style="text-align:right">
+                <div class="login">
+                    <a href="login.html">登录</a>
+                    <a href="reg.html">注册</a>
+                </div>
+                <div class="logout">
+                    <span></span>
+                    <a href="#">退出</a>
+                </div>
+            </div>
+        </div>
+        <h1>首页</h1>
+    </div>
+
+    <script>
+        const login = document.querySelector('.login')
+        const logout = document.querySelector('.logout')
+        const btnLogout = logout.querySelector('a')
+
+        // 进入首页，先获取cookie
+        // const cookies = document.cookie
+
+        // // username=tiantian; password=123 -> {username:'tiantian',password:123}
+        // const arr = cookies.split('; ')
+
+        // const data = {}
+        // arr.forEach(item=>{
+        //     const [key,value] = item.split('=')
+        //     data[key] = value;
+        // })
+        
+        const data = JSON.parse(localStorage.getItem('userInfo'))
+  
+        // 判断是否已登录
+        // 登录：存在username&password
+        // null.username,undefined.username
+        if(data && data.username){ 
+            login.style.display = 'none';
+            logout.style.display = 'block'
+
+            logout.querySelector('span').innerHTML = data.username;
+        }
+
+        // 退出登录
+        btnLogout.onclick = ()=>{
+            // 删除cookie: username+passowrd
+
+            // let date = new Date();
+            // date.setDate(date.getDate()-1);
+
+            // document.cookie = 'username=x;expires='+date;
+            // document.cookie = 'password=x;expires='+date;
+
+            // 删除本地存储：userInfo
+            localStorage.removeItem('userInfo')
+
+            // 刷新页面
+            location.reload();
+        }
+
+        // 添加storage时间
+        window.addEventListener('storage',function(e){
+            // 该事件只有在其它页面修改localStorage时触发
+            console.log(666,e)
+            if(e.key === 'userInfo'){
+                // 登录
+                if(e.newValue && !e.oldValue){
+                    login.style.display = 'none';
+                    logout.style.display = 'block'
+                    const userInfo = JSON.parse(e.newValue)
+                    logout.querySelector('span').innerHTML = userInfo.username;
+                }
+                // 退出
+                else if(!e.newValue && e.oldValue){
+                    login.style.display = 'block';
+                    logout.style.display = 'none'
+                }
+            }
+        },false);
+    </script>
+</body>
+
+</html>

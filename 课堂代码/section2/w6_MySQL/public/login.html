@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>用户登录</h1>
+        <div class="form">
+            <div class="form-item mt-3">
+                <label for="username" class="form-label">用户名</label>
+                <input type="text" id="username" class="form-control">
+                <div class="invalid-feedback">
+                    用户名或密码错误
+                </div>
+            </div>
+            <div class="form-item mt-3">
+                <label for="password" class="form-label">密码</label>
+                <input type="password" id="password" class="form-control">
+                <div class="invalid-feedback">
+                    用户名或密码错误
+                </div>
+            </div>
+            <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" id="mdl" checked>
+                <label class="form-check-label" for="mdl">
+                    下次免登录
+                </label>
+            </div>
+            <div class="form-item mt-3">
+                <button class="btn btn-primary btnSubmit me-3">登录</button>
+                <span>还没有账号？请先<a href="reg.html">注册</a></span>
+            </div>
+        </div>
+    </div>
+    <script src="./utils/request.js"></script>
+    <script>
+        const username = document.querySelector('#username')
+        const password = document.querySelector('#password')
+        const btnSubmit = document.querySelector('.btnSubmit')
+
+        btnSubmit.onclick = async function () {
+            const data = await request({
+                url: '/login',
+                data: {
+                    username: username.value,
+                    password: password.value
+                }
+            })
+            // .then(
+            //     // 成功
+            //     function(){},
+            //     // 失败
+            //     function(){}
+            // )
+            // // 失败
+            // .catch(function(){
+
+            // })
+
+            if (data.code === 200) {
+                // 登录成功后保存用户信息到本地（保存登录状态）
+
+                // Cookie存储技术
+                // 临时cookie: 有效期为session，关闭浏览器会自动删除
+                // document.cookie = `username=${username.value}`
+                // document.cookie = `password=${password.value}`
+
+                let date = new Date();
+                date.setDate(date.getDate() + 7)
+                document.cookie = `username=${username.value};expires=` + date
+                document.cookie = `password=${password.value};expires=` + date
+
+                // webStorage存储技术
+                localStorage.setItem('userInfo',JSON.stringify(data.data));
+
+                location.href = 'index.html'
+            } else if (data.code === 400) {
+                username.classList.add('is-invalid')
+                password.classList.add('is-invalid')
+            }
+
+            console.log('data=', data)
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>aja请求</title>
+</head>
+<body>
+    <h1>ajax请求</h1>
+    <div id="goodslist">
+        
+    </div>
+    <script>
+        /*  
+
+            发起ajax请求，获取服务器数据
+            1. 创建一个异步请求对象
+            2. 设置请求参数，建立与服务器连接
+            3. 向服务器发送请求
+            4. 处理服务器响应数据
+
+
+            json规范
+                * 必须双引号
+                * 不能有注释
+                * 不能有多余的逗号
+                * 属性值只能为一下数据类型
+                    * Number
+                    * String
+                    * Boolean
+                    * null
+                    * Object
+                        * Array
+            * json数据
+                * json字符串：符合json规范的字符串
+                * json对象：符合json规范的对象
+        */
+
+        // 1. 创建一个异步请求对象
+        const xhr = new XMLHttpRequest();
+        console.log('xhr=',xhr)
+
+        xhr.onload = function(){
+            // 在onload时间中通过xhr.responseText获取到服务器响应的数据（json字符串）
+            console.log('data1=',xhr.responseText)
+
+            // json字符串->json对象
+            // JSON.parse()的参数必须为json字符串
+            const data = JSON.parse(xhr.responseText)
+
+            // 分清json对象与js对象
+            // let obj = {"username":"laoxie","age":18}
+            // let obj = {username:"laoxie",age:18}
+
+            console.log('data2',data); // data = {code,data,msg}
+
+            // 解构并改名：声明goodslist变量，并把对象中的data属性赋值给goodslist
+            const {data:goodslist} = data;
+
+            // 生成html结构并写入页面#goodslist
+            console.log('goodslist',goodslist)
+            const html = goodslist.result.map(item=>{
+
+            })
+        }
+
+        // 2. 设置请求参数，建立与服务器连接: xhr.open(请求类型,接口地址,是否异步请求)
+        xhr.open('get','http://120.76.247.5:2003/api/goods',true)
+
+        // 3. 向服务器发送请求：xhr.send()
+        xhr.send()
+    </script>
+</body>
+</html>

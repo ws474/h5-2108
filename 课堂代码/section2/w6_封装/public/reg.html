@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+</head>
+<body>
+    <div class="container">
+        <h1>免费注册</h1>
+        <div>
+            <!-- <form> -->
+                <div class="form-item mt-3">
+                    <label for="username" class="form-label">用户名</label>
+                    <input type="text" id="username" class="form-control">
+                    <div class="invalid-feedback">
+                        你的名字太帅，已被他人注册
+                      </div>
+                      <div class="valid-feedback">
+                        用户名可用
+                      </div>
+                </div>
+                <div class="form-item mt-3">
+                    <label for="password" class="form-label">密码</label>
+                    <input type="password" id="password" class="form-control">
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-success btn-lg btnSubmit">注册</button>
+                    <span>已有账号？请直接<a href="login.html">登录</a></span>
+                </div>
+            <!-- </form> -->
+        </div>
+
+    </div>
+    <script src="./utils/request.js"></script>
+        <script>
+            const username = document.querySelector('#username')
+            const password = document.querySelector('#password')
+            const btnSubmit = document.querySelector('.btnSubmit')
+
+            
+
+            const xhr_check = new XMLHttpRequest()
+            xhr_check.onload = function(){
+                const data = JSON.parse(xhr_check.responseText)
+                console.log('data',data)
+                if(data.code===200){
+                    // alert('用户名已存在')
+                    username.classList.remove('is-invalid')
+                    username.classList.add('is-valid')
+                }else{
+                    username.classList.remove('is-valid')
+                    username.classList.add('is-invalid')
+                }
+            }
+
+            username.onchange = function(){
+                xhr_check.open('get','http://localhost:2108/api/reg/check?username='+username.value,true)
+                xhr_check.send()
+            }
+
+   
+                
+       
+            btnSubmit.onclick = function(){
+
+                request({
+                    url:'http://localhost:2108/api/reg',
+                    method:'post',
+                    data:{
+                        username:username.value,
+                        password:password.value
+                    }
+                }).then(data=>{
+                    if(data.code === 200){
+                        location.href="login.html?username="+username.value
+                    }
+                })
+                
+            }
+
+        </script>
+    
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="./plugins/jquery.ui/jquery-ui.css">
+    <style>
+        #box,.box{margin:10px;width:100px;height:100px;background-color: #f00;}
+    </style>
+</head>
+
+<body>
+    <div id="box"></div>
+
+    <div class="box">1</div>
+    <div class="box">2</div>
+    <div class="box">3</div>
+    <input type="date" />
+    <script src="js/jquery-3.1.1.js"></script>
+    <script src="./plugins/jquery.ui/jquery-ui.js"></script>
+   <script>
+       jQuery(function($){
+        //    $('#box').draggable()
+        //    $('#box').resizable()
+
+           // 链式调用
+           $('#box').resizable().draggable()
+
+           $('#box')
+           .addClass('box')
+           .html('drag')
+           .css({color:'#fff',textAlign:'center',lineHeight:'100px'})
+
+           $('.box').draggable();
+       });
+   </script>
+</body>
+
+</html>

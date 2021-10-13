@@ -1,0 +1,36 @@
+﻿-- 1、查询所有的课程的名称以及对应的任课老师姓名
+SELECT
+    cname,
+    tname 
+FROM
+    teacher
+    INNER JOIN course ON course.teacher_id = teacher.tid;
+
+-- 2、查询平均成绩大于80分的同学的姓名和平均成绩，并从小到大排列
+SELECT 
+    sname,
+    avg(value) AS avgv
+FROM 
+    score 
+    INNER JOIN student ON student_id=student.sid
+GROUP BY student_id HAVING avg(value)>50
+ORDER BY avgv DESC
+
+-- 3、 查询没有报李平老师课的学生姓名
+SELECT sname FROM student WHERE sid not in(
+	SELECT 
+		student_id 
+	FROM 
+		score 
+		INNER JOIN student ON score.student_id=student.sid 
+	where 
+		course_id in(
+			SELECT course.cid FROM course INNER JOIN teacher ON course.teacher_id=teacher.tid AND teacher.tname='李平'
+		)
+)
+
+-- 4、 查询选修物理课程和体育课程其中一门的学生姓名
+
+-- 5、 查询挂科超过两门(包括两门)的学生姓名和班级
+
+-- 6、找出同时选了李平老师所有课的学生班级和姓名

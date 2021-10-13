@@ -1,0 +1,21 @@
+{
+  "name": "w5_MySQL",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/server.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.1.1",
+    "bootstrap-icons": "^1.5.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
+}

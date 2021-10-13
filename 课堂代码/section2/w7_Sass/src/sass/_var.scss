@@ -1,0 +1,19 @@
+$mainColor:#58bc58 !default;
+
+// 常规字体大小
+$fontSize:16px;
+$smallFontSize:$fontSize*0.8;
+$bigFontSize:$fontSize*1.2;
+
+@function getColor($type:bgcolor) {  
+    $color: red;
+    @if $type == salePrice {
+        $color: blue;
+    } @else if $type == huodong {
+        $color: #f60;
+    } @else {
+        $color: black;
+    }
+
+    @return $color;
+}  

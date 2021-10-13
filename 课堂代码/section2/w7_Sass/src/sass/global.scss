@@ -1,0 +1,41 @@
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .cart-list {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    width: 200px;
+    border: 1px solid #ddd;
+    h4 {
+      margin: 0;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+    img {
+      width: 60px;
+    }
+    li {
+      position: relative;
+      height: 200px;
+    }
+    .btn-close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 5px;
+      &:hover {
+        background-color: #f00;
+        color: #fff;
+      }
+    }
+  }
+  .goods-list {
+    img {
+      width: 200px;
+    }
+  }
+  

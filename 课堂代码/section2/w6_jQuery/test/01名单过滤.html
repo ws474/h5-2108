@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>列表内容过滤</title>
+	<style>
+		ul{list-style: none;padding:0;margin:0;}
+		.datalist{display:none;padding:10px;width:200px;border:1px solid #ddd;line-height:2;max-height:300px;overflow-y: auto;}
+		.datalist li{border-bottom:1px dotted #ddd;text-indent:10px;}
+	</style>
+	<script src="js/jquery-3.1.1.js"></script>
+	<script>
+		$(function(){
+			/*
+				1)根据名单生成html结构，并写入.datalist
+				2）#keyword获得焦点时
+					显示.datalist
+				3）失去焦点
+					隐藏.datalist
+				4）根据输入显示过滤结果
+					:contains()
+				5）点击名字写入输入框
+			 */
+			var namelist = '陈婷,符木诗,石艳琳,吴文婧,谈冲,戴萍萍,凌华进,吴雨桃,李想,赵凤强,杨定宇,岑海飞,徐杰,许聪,刘真贺,李家杰,连显亮,石威,卿艺文,覃佳旭,张伟锐,盘剑,韦仁杏,韦露,韦佳玲,刘家荣,陈荣,李丁,杨明,盛治晶,饶雍,黄达忠,杨秀敏,何翠香,李鸿疆,李润奕,邹明亮,王皓,黎覃康,覃淑燕,韦松吕,张思,王鹏,黄丹鸿,杨金桂,黄艺英,牙云敏,卢望保,林鸾纯,刘静敏,梁土华,郑传驰,余小娟,李科达,阳乙桃,米光越,吴超,宋柑桥,万升浩 ,黄甲,杨玉朝,许萍花,刘昱均,刘艳,罗棋';
+
+			namelist = namelist.split(',');
+
+			var $datalist = $('.datalist');
+			var $keyword = $('#keyword');
+
+			// 1)根据名单生成html结构，并写入.datalist
+			var $ul = $('<ul/>');
+			$.each(namelist,function(idx,val){
+				$('<li/>').text(val).appendTo($ul);
+			});
+			$ul.appendTo($datalist);
+
+			// 2）#keyword获得焦点时,显示.datalist
+			$keyword.focus(function(){
+				var keywork = $keyword.val();
+				$datalist.find('li').hide().filter(':contains('+keywork+')').show();
+
+				$datalist.slideDown();
+			})
+
+			// 3）失去焦点,隐藏.datalist
+			.blur(function(){
+				$datalist.slideUp();
+			})
+
+			// 4）根据输入显示过滤结果
+			.on('input',function(){
+				var keywork = $keyword.val();
+
+				// 先全部隐藏，然后显示包含keyword的li
+
+				$datalist.find('li').hide().filter(':contains('+keywork+')').show();
+			});
+
+			// 5）点击名字写入输入框
+			$datalist.find('li').click(function(){
+				$keyword.val($(this).text());
+
+				var keywork = $keyword.val();
+				$datalist.find('li').hide().filter(':contains('+keywork+')').show();
+			})
+		})
+	</script>
+</head>
+<body>
+	<input type="text" id="keyword">
+	<div class="datalist"></div>
+</body>
+</html>

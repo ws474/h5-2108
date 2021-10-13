@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="./assets/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <style>
+        .cart-page img{width:100%;}
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-smartwatch"></i>
+                一表人才
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="bi bi-house"></i>
+                            首页
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="discover.html">
+                            <i class="bi bi-vinyl"></i>
+                            发现
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">
+                            <i class="bi bi-cart2"></i>
+                            购物车
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex login">
+
+                    <a class="nav-link" href="login.html">登录</a>
+                    <a class="nav-link" href="reg.html">注册</a>
+                </div>
+                <div class="d-flex logout">
+                    <i class="bi bi-person navbar-text"></i>
+                    <span class="navbar-text"></span>
+                    <a class="nav-link" href="#">退出</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid p-3 cart-page">
+        <div class="goodslist">
+
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <button class="btn btn-outline-danger btnClear">清空购物车</button>
+            </div>
+            <div class="col-6 text-end price">
+                <span class="totalPrice">9709809</span>
+                <button class="btn btn-danger">去计算</button>
+            </div>
+        </div>
+    </div>
+    <script src="./js/bootstrap.js"></script>
+    <script src="./js/common.js"></script>
+    <script>
+        /**
+         * @购物车
+            * 进入页面获取本地存储数据cartlist，根据cartlist渲染页面
+            * 
+         */
+        const goodslist = document.querySelector('.goodslist')
+        const totalPrice = document.querySelector('.totalPrice')
+        const btnClear = document.querySelector('.btnClear')
+        let cartlist = JSON.parse(localStorage.getItem('cartlist')) || []
+        
+
+        render()
+
+        
+
+        goodslist.onclick = function(e){
+            // 事件源对象:e.target
+
+            // 删除: 删除节点+删除本地存储数据
+            // if(/btnDel/.test(e.target.className)
+            if(e.target.classList.contains('btnDel')){
+                if(confirm('确认删除')){
+                    const {id} = e.target.dataset;
+                    
+                    //  把当前商品从cartlist中删除
+                    cartlist = cartlist.filter(item=>item._id !== id);
+    
+                    // 重写本地存储中的数据
+                    localStorage.setItem('cartlist',JSON.stringify(cartlist))
+
+                    // 删除节点
+                    // const item = e.target.parentNode.parentNode
+                    // item.parentNode.removeChild(item)
+    
+                    // 重新渲染页面
+                    render();
+                }
+            }
+        }
+
+        // 修改数量
+        goodslist.oninput = function(e){
+            if(e.target.classList.contains('qty')){
+                const {id} = e.target.dataset;
+
+                cartlist = cartlist.map(item=>{
+                    if(item._id === id){
+                        item.qty = e.target.value;
+                    }
+                    return item
+                })
+
+                localStorage.setItem('cartlist',JSON.stringify(cartlist))
+                // render();
+
+                calcPrice()
+            }
+        }
+
+        // 清空购物车
+        btnClear.onclick = function(){
+            if(confirm('是否清空购物车')){
+                cartlist = [];
+                localStorage.setItem('cartlist',JSON.stringify(cartlist))
+                render();
+
+            }
+        }
+
+        // 监听本地存储数据，实时渲染购物车页面
+        window.onstorage = function(e){
+            if(e.key === 'cartlist'){
+                cartlist = JSON.parse(e.newValue) || []
+                render();
+            }
+        }
+
+        function calcPrice(){
+            // [{},{},{},{}]
+            const total = cartlist.reduce(function(val,item){
+                // val: 上一次遍历的返回值
+                return val+item.sales_price*item.qty;
+            },0)
+
+            console.log('total=',total)
+
+            totalPrice.innerHTML = total.toFixed(2)
+        }
+
+        function render(){
+            // let total = 0;
+            goodslist.innerHTML = cartlist.map(item=>{
+                // total += item.sales_price*item.qty;
+
+                return `
+                    <div class="row mt-3">
+                        <div class="col-2">
+                            <img src="${item.img_url}" />
+                        </div>
+                        <div class="col">
+                            <h4>${item.goods_name}</h4>
+                            <p class="price"><del>${item.price}</del></p>
+                            <div class="input-group input-group-sm mb-3" style="width:120px;">
+                                <input type="number" min="1" class="form-control qty" value="${item.qty}" data-id="${item._id}">
+                                <span class="input-group-text"> &times; ${item.sales_price}</span>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <button class="btn btn-outline-danger btn-sm btnDel" data-id="${item._id}">删除</button>
+                        </div>
+                    </div>
+                `
+            }).join('');
+
+            // 写入总价
+            // totalPrice.innerHTML = total.toFixed(2)
+            calcPrice();
+        }
+    </script>
+</body>
+
+</html>

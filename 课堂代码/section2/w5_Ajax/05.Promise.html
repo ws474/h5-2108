@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>05.Promise</title>
+</head>
+<body>
+    <h1>05.Promise</h1>
+    
+    <script>
+        /*  
+            05.Promise
+                * resolve
+                * reject
+            * 原型方法
+                * then
+                * catch
+            
+        */
+
+        // 实例化一个promise对象
+        const promise = new Promise(function(resolve,reject){
+            console.log('我承诺：爱你一辈子');
+
+            setTimeout(()=>{
+                // console.log('81年后：白头偕老')
+                // resolve('success')// pending->fulfilled
+
+                // console.log('一天后：对不起，我找到真爱')
+                reject('fail');// pending->rejected
+
+            },5000)
+        })
+        
+        promise.then(
+            function(data){
+                // 成功：这里的代码在promise状态变成fulfilled后执行
+                console.log(data,'我们白头偕老吧')
+            },
+            // function(){
+            //     // 失败：这里的代码在promise状态变成rejected后执行
+            //     console.log('对不起，我找到真爱')
+            // }
+        )
+
+        promise.catch(function(reason){
+            // 失败：这里的代码在promise状态变成rejected后执行
+            console.log(reason,'对不起，我找到真爱')
+        })
+
+
+        // 创建一个状态为`Fulfilled`的promise对象
+        const promise1 = Promise.resolve('laoxie');
+        console.log('promise1',promise1)
+        
+        // 创建一个状态为`Rejected`的Promise对象
+        const promise2 = Promise.reject('tiantian')
+        console.log('promise2',promise2)
+    </script>
+</body>
+</html>

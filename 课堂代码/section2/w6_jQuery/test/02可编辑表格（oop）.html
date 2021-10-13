@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>可编辑表格</title>
+	<style>
+        .datalist{width:800px;}
+        table{width:100%;border:1px solid #ddd;border-collapse: collapse;}
+        td,th{border:1px solid #ddd;padding:5px 10px;}
+        thead{background-color: #eee;}
+        thead th{text-align:left;}
+
+        tbody tr:nth-child(even){background-color: #f5f5f5;}
+
+        tbody tr.selected{background-color: #ffc;}
+
+        tbody td.active{position:relative;background-color: #ffc;}
+        tbody td.active>div{position:absolute;top:0;left:0;right:0;bottom:0;border:2px solid #fc0;}
+        tbody td.active input{position:absolute;top:0;left:0;right:0;bottom:0;padding:5px 10px;width:100%;border:none;background-color: #ffc;box-sizing:border-box;
+        	font-size:16px;
+        }
+
+        .content{line-height:2;}
+    </style>
+	<script src="js/jquery-3.1.1.js"></script>
+	<script>
+		jQuery($=>{
+			// 面向对象编程：表格操作对象
+			var myTable = {
+				title:[{
+					text:'#',
+					width:20,
+					align:'center'
+				},'姓名','年龄','性别','爱好','人生格言',{
+					text:'操作',
+					width:40
+				}],
+				row:10,
+
+				// 当前单元格所在行/列索引
+				// 默认为null
+				$currentTd:null,
+				rowIdx:null,
+				cellIdx:null,
+
+				// 容器
+				$container:$('.datalist'),
+
+				// 初始化
+				init(){
+					// 保存this，供后面使用
+					var self = this;
+
+					// 创建表格
+					var $table = $('<table/>');
+
+					// 生成表格头
+					var $thead = $('<thead/>');
+					$('<tr/>').html(
+						this.title.map(item=>{
+							if(typeof item === 'string'){
+								return `<th>${item}</th>`;	
+							}else{
+								var style = ``;
+								if(item.width) style += `width:${item.width}px;`;
+								if(item.align) style += `text-align:${item.align}`;
+								return `<th style=${style}>${item.text}</th>`;
+							}
+						}).join('')
+					).appendTo($thead);
+					$thead.appendTo($table);
+
+					// 生成行
+					var $tbody = $('<tbody/>');
+					for(var i=0;i<this.row;i++){
+						var $tr = $('<tr/>');
+
+						// 生成列
+						for(var j=0,len=this.title.length;j<len;j++){
+							var content;
+
+							// 第一列：行号
+							if(j==0){
+								content = i+1;
+							}
+
+							// 最后一列：删除
+							else if(j==len-1){
+								content = '<button class="del">&times</buton>';
+							}
+
+
+							else{
+								content = `单元格${i}${j}`
+							}
+
+							// 写入行
+							$('<td/>').html(content).appendTo($tr);
+						}
+
+						// 写入tbody
+						$tr.appendTo($tbody);
+					}
+
+					// 组合表格并写入页面
+					$table.append([$thead,$tbody]);
+					this.$container.append($table);
+
+
+					// 编辑
+					// 点击高亮
+					this.$container.on('click','tbody td',function(e){
+						var cellIdx = $(this).index();
+						var rowIdx = $(this).closest('tr').index();
+
+						self.rowIdx = rowIdx;
+						self.cellIdx = cellIdx;
+						self.focus();
+					})
+
+					// 双击编辑
+					// 结合高亮状态实现双击效果
+					.on('click','.active div',function(e){
+						self.edit();
+						e.stopPropagation();
+					})
+
+					// 编辑状态不冒泡
+					.on('click','input',function(e){
+						e.stopPropagation();
+					})
+
+					// 失去焦点时保存信息
+					.on('blur','input',function(e){
+						self.save();
+					})
+
+					// 删除功能
+					.on('click','.del',function(){
+						if(confirm('你确定要删除本条数据么')){
+							var $currentTr = $(this).closest('tr');
+							$currentTr.remove();
+						}
+					})
+
+					$(document).on('keyup',function(e){
+						var keyCode = e.keyCode;
+
+						// 使用上下左右方向键之前必须先要有当前单元格
+						if(!self.$currentTd) return;
+
+						if(keyCode === 37){
+							self.cellIdx--;
+							self.focus();
+						}else if(keyCode === 38){
+							self.rowIdx--;
+							self.focus();
+						}else if(keyCode === 39){
+							self.cellIdx++;
+							self.focus();
+						}else if(keyCode === 40){
+							self.rowIdx++;
+							self.focus();
+						}
+
+						// 回车编辑
+						else if(e.keyCode === 13){
+							self.edit();
+						}
+					});
+				},
+
+				// 编辑
+				edit(){
+					// 无currentTd，忽略编辑操作
+					if(!this.$currentTd) return;
+
+					var $input = $('<input/>').attr({type:'text'}).val(this.$currentTd.text());
+					this.$currentTd.empty().append($input);
+					$input.focus();
+				},
+
+
+				// 高亮
+				focus(){
+
+					// 第一列和最后一列不能编辑
+					if(this.cellIdx < 1){
+						this.cellIdx = 1;
+						return;
+					}else if(this.cellIdx > this.title.length-2){
+						this.cellIdx = this.title.length-2;
+						return;
+					}
+
+					if(this.rowIdx<0){
+						this.rowIdx = 0;
+						return;
+					}else if(this.rowIdx>this.row-1){
+						this.rowIdx = this.row-1;
+						return;
+					}
+
+					// 先保存之前单元格
+					this.save();
+
+					this.$currentTd = this.$container.find('tbody tr').eq(this.rowIdx).children().eq(this.cellIdx).addClass('active').append('<div/>');
+
+				},
+
+				// 去除高亮
+				blur(){
+					// 无currentTd，忽略编辑操作
+					if(!this.$currentTd) return;
+
+					this.$currentTd.removeClass('active').children('div').remove();
+				},
+
+
+				// 保存
+				save(){
+					// 无currentTd，忽略编辑操作
+					if(!this.$currentTd) return;
+
+					this.blur();
+					var $input = this.$currentTd.find('input');
+					if($input.length){
+						this.$currentTd.html($input.val());
+					}
+				}
+			}
+
+			// 操作对象
+			myTable.init();
+		});
+	</script>
+</head>
+<body>
+	<div class="datalist"></div>
+</body>
+</html>

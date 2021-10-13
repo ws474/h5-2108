@@ -1,0 +1,65 @@
+/*
+    <div class="list">
+        <h4>商品列表</h4>
+        <ul>
+            <li>
+                <img src="" />
+                <h6></h6>
+                <p class="price"><del></del><span></span></p>
+            </li>
+            <li>
+                <img src="" />
+                <h6></h6>
+                <p class="price"><del></del><span></span></p>
+            </li>
+        </ul>
+    </div>
+*/
+
+
+/* CSS写法 */
+.list{
+    padding:10px;
+}
+.list h4{margin:0;}
+.list ul{
+    padding:0;margin:0;list-style: none;
+}
+.list ul li{position: relative;}
+.list ul li img{padding:10px;width:120px;height:120px;border:1px solid #ddd;}
+.list ul li h6{margin:10px 0;}
+.list ul li .price del::before,.list ul li .price span::before{
+    content:'￥'
+}
+.list ul li .price del{color:#666;margin-right:5px;}
+.list ul li .price span{color:#f00}
+
+/*
+// Sass写法
+
+$pd10:10px;
+.list{
+    padding:$pd10;
+    h4{
+        margin:0
+    }
+    ul{
+        padding:0;margin:0;list-style: none;
+        li{
+            position: relative;
+            img{padding:$pd10;width:120px;height:120px;border:1px solid #ddd;}
+            h6{margin:10px 0;}
+            .price del{
+                color:#666;margin-right:5px;
+                &::before{
+                    content:'￥'
+                }
+            }
+            .price .span {
+                @extend .price del;
+                color:#f00
+            }
+        }
+    }
+}
+*/

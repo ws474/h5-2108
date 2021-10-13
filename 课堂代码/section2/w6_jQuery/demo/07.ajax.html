@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ajax</title>
+    <style>
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .cart-list {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        width: 200px;
+        /*height: 400px;*/
+        border: 1px solid #ddd;
+        /*overflow-y:auto;*/
+    }
+    
+    .cart-list h4 {
+        margin: 0;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .cart-list img {
+        width: 60px;
+    }
+
+    .cart-list li{position:relative;height:200px;}
+    .cart-list .btn-close{position:absolute;top:0;right:0;padding:5px;}
+    .cart-list .btn-close:hover{background-color:#f00;color:#fff;}
+    
+    .goods-list img {
+        width: 200px;
+    }
+    </style>
+   
+</head>
+
+<body>
+    <div class="goods-list">
+        <h4>产品列表</h4>
+        <ul>
+
+        </ul>
+    </div>
+    <script src="js/jquery-3.1.1.js"></script>
+   <script>
+       jQuery(function($){
+           // 全局默认配置，用户设置一些公共参数
+        $.ajaxSetup({
+            // url: "http://120.76.247.5:2003/api",
+
+            // 发送ajax请求之前
+            beforeSend(xhr){
+                console.log('beforeSend=',xhr)
+
+                // 设置baseUrl
+                this.url = 'http://120.76.247.5:2003/api' + this.url;
+            },
+            complete(xhr){
+                console.log('complete=',xhr)
+                // xhr.abort();
+            },
+
+            // 5s后如果请求没有返回，则自动取消
+            timeout:5000
+        });
+
+
+           // jQuery.ajax()
+            // const res = $.ajax({
+            //     // url:'http://120.76.247.5:2003/api/goods',
+            //     url:'/goods',
+            //     // type:'post',
+            //     // data:{
+            //     //     a:10,
+            //     //     b:20
+            //     // },
+            //     // 发送信息至服务器时内容编码类型(默认: "application/x-www-form-urlencoded") 
+            //     // contentType:'application/json',
+            //     success(res){
+            //         console.log('success=',res)
+            //     }
+            // }).then(function(res){
+            //     console.log('then',res)
+            // })
+
+            const xhr = $.ajax('/goods').then(res=>{
+                console.log('res=',res)
+                const {result} = res.data;
+
+                const html = result.map(item=>{
+                    return `<li>
+                            <img src="http://120.76.247.5:2003${item.img_url}" />
+                            <h4>${item.goods_name}</h4>
+                            <p class="price"><del>${item.price}</del><span>${item.sales_price}</span></p>
+                        </li>`
+                }).join('')
+
+                // 兼容低版本浏览器
+                // const html2 = $.map(result,function(item,idx){
+                //     return `<li>
+                //             <img src="http://120.76.247.5:2003${item.img_url}" />
+                //             <h4>${item.goods_name}</h4>
+                //             <p class="price"><del>${item.price}</del><span>${item.sales_price}</span></p>
+                //         </li>`
+                // }).join('')
+                // console.log('html2',html2)
+
+                $('.goods-list ul').html(html)
+            })
+
+            console.log('xhr=',xhr)
+       });
+   </script>
+</body>
+
+</html>

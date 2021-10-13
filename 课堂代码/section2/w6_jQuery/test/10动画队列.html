@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>07动画队列</title>
+	<style>
+		.box{position: relative;width:200px;}
+		.box img{width:100%;}
+	</style>
+	<script src="lib/jquery-3.2.1.js"></script>
+	<script>
+		// jQuery(document).ready(function(){})
+		$(function(){
+			/*
+				动画队列
+					*
+					* stop([clearQueue],[jumpToEnd])：停止当前元素所有《正在运行》的动画。
+						* clearQueue：清除队列
+						* jumpToEnd：跳到最后一帧
+			 */
+			var $box = $('.box');
+
+			$('#btn1').on('click',function(){
+				$box.animate({width:100},3000).delay(5000).animate({top:-50},2000,function(){
+
+					// 字体大小的改变
+					$('.box2').animate({fontSize:48})
+				});
+
+			});
+			$('#btn2').on('click',function(){
+				$box.animate({left:300},1000)
+			});
+			$('#btn3').on('click',function(){
+				$box.animate({opacity:0.3},1000)
+			});
+
+			$('#btnStop').on('click',function(){
+				$box.stop(true,true);
+			});
+		});
+	</script>
+</head>
+<body>
+	<button id="btn1">width</button>
+	<button id="btn2">left</button>
+	<button id="btn3">opacity</button>
+	<button id="btnStop">stop</button>
+	<div class="box"><img src="img/g5.jpg"></div>
+	<div class="box2">黑妹牙膏</div>
+</body>
+</html>

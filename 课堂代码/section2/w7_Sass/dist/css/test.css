@@ -1,0 +1,138 @@
+@charset "UTF-8";
+a {
+  font-size: 16px;
+  color: #58bc58;
+}
+a:hover {
+  color: #fc0;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+.list {
+  padding: 5px;
+}
+.list li {
+  float: left;
+  border-left: 5px solid #900;
+}
+
+h1 {
+  font-size: 36 px;
+}
+
+h2 {
+  font-size: 18 px;
+}
+
+h3 {
+  font-size: 12 px;
+}
+
+h4 {
+  font-size: 9 px;
+}
+
+h5 {
+  font-size: 7.2 px;
+}
+
+h6 {
+  font-size: 6 px;
+}
+
+.price, .sale-price {
+  color: blue;
+  border-color: #f60;
+  background-color: black;
+}
+
+.col-3 {
+  width: 33.3333333333%;
+}
+
+.test {
+  color: #7ccb7c;
+}
+
+.test2 {
+  color: #40a140;
+}
+
+.title {
+  font-size: 19.2px;
+}
+
+.sub-title {
+  font-size: 12.8px;
+  padding: 8em;
+}
+
+.price, .sale-price {
+  padding: 10px;
+  font-size: 16px;
+}
+.price del, .sale-price del, .price span, .sale-price span {
+  color: #666;
+}
+.price del::before, .sale-price del::before, .price span::before, .sale-price span::before {
+  content: "￥";
+}
+.price span, .sale-price span {
+  color: #f00;
+}
+
+.cartlist, .goodslist {
+  padding: 10;
+  margin: 15px;
+  border: 1px solid #ddd;
+}
+
+.goodslist {
+  border-width: 2px;
+}
+
+.cartlist li {
+  float: left;
+  width: 120px;
+  height: 300px;
+}
+
+.content {
+  color: red;
+  font-size: 25px;
+  font-weight: bold;
+  border: 1px solid blue;
+}
+
+.disciption {
+  color: red;
+  font-size: 25px;
+  font-weight: bold;
+  border: 1px solid blue;
+  color: #f60;
+}
+
+@media only screen and (max-width: 800px) {
+  .box {
+    font-size: 16px;
+  }
+
+  .title {
+    color: #f00;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .box {
+    font-size: 16px;
+  }
+
+  .title {
+    color: #f00;
+  }
+}
+.hello {
+  color: #333;
+}

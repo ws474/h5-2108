@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>03.手风琴</title>
+	<style>
+	h1{text-align:center;}
+	.accordion{width:600px;margin:0 auto;}
+	.accordion h4{margin:0;padding:0 15px;height:50px;line-height:50px;border-bottom:1px solid rgba(255,255,255,.2);background-color:#2196F3;}
+	.accordion .content{padding:15px;border:1px solid #ddd;height:160px;}
+	</style>
+	<script src="js/jquery-3.1.1.js"></script>
+	
+</head>
+<body>
+	<h1>03.手风琴</h1>
+	<div class="accordion">
+		<h4>标题1</h4>
+		<div class="content">内容1</div>
+
+		<h4>标题2</h4>
+		<div class="content">内容2</div>
+
+		<h4>标题3</h4>
+		<div class="content">内容3</div>
+
+		<h4>标题4</h4>
+		<div class="content">内容4</div>
+
+		<h4>标题5</h4>
+		<div class="content">内容5</div>
+	</div>
+	<script>
+		jQuery(function($){
+			// $ === jQuery
+
+			// 隐藏所有.content
+			// $('.content').css('display','none')
+
+			// 隐藏除第一个以外的.content
+			// $('.content').not(':first').css({display:'none'})
+			$('.content').not(':first').hide()
+			// $('.content:gt(0)').css({display:'none'})
+
+
+			// 点击标题显示相应的内容
+			$('h4').on('click',function(){
+				// this: 指向绑定事件的元素节点（原生节点）
+				console.log('this=',this)
+				// $('.content').show()
+
+				const self = this;
+
+				const $currentContent = $(this).next()
+				$currentContent.show()
+
+				// $currentContent.nextAll('.content').hide();
+				// $currentContent.prevAll('.content').hide()
+				$currentContent.siblings('.content').hide()
+			})
+		})
+	</script>
+</body>
+</html>

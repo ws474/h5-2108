@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加元素</title>
+    <style>
+    .box-wrap{width:600px;margin:0 auto;text-align:center;}
+    .add-box{display:inline-block;margin-top:20px;padding:15px;border:1px solid #ddd;}
+    .box-wrap img{width:60px;margin:0 5px;vertical-align: middle;}
+    </style>
+    <script src="js/jquery-3.1.1.js"></script>
+    <script>
+    $(function() {
+        /* 
+            1)内部添加
+            append: 在元素内最后面追加内容（后置）
+            prepend: 向元素内部增加内容（前置）
+
+            2)外部插入内容
+            after: 在元素后面插入内容
+            before: 在元素前面插入内容
+
+            **如果页面上已经存在#prepend元素，append,prepend,after,before会把元素移动到页面相应的位置
+
+            3)创建jquery对象
+                $('<div>生成一个div</div>')
+        */
+        $('#append').click(function(){
+            $('.add-box').append('<img src="images/1.jpg" />');
+            // $('<img src="images/1.jpg" />').appendTo('.add-box');
+        });
+        $('#prepend').click(function(){
+            $('.add-box').prepend('<img src="images/2.jpg" />');
+        });
+
+        
+        $('#after').click(function(){
+            $('.add-box').after('<img src="images/3.jpg" />');
+        });
+        $('#before').click(function(){
+            $('.add-box').before('<img src="images/1.jpg" />');
+        });
+
+
+        // @生成元素
+        // var img = document.createElement('img');
+        // img.src = 'images/1.jpg';
+        // $('<img src="images/1.jpg" />').appendTo('body');
+
+        // var table = document.createElement('table');
+        // var tr = document.createElement('tr');
+        // var td = document.createElement('td');
+        // td.innerHTML = '我是td';
+        // tr.appendChild(td);
+        // table.appendChild(tr);
+        // document.body.appendChild(table);
+        // $('<table><tr><td>我是td</td></tr></table>').appendTo('body');
+
+
+        // 如果页面上已经存在#prepend元素，append,prepend,after,before会把元素移动到页面相应的位置
+        // $('#prepend').appendTo('body');
+        // $('body').append($('#prepend'));
+    });
+    </script>
+</head>
+
+<body>
+    <!-- 添加元素 -->
+    <div class="box-wrap">
+        <h1>append,prepend,after,before演示</h1>
+        内部插入：
+        <button id="append">append</button>
+        <button id="prepend">prepend</button>
+         &nbsp; 外部插入：
+        <button id="after">after</button>
+        <button id="before">before</button>
+        <br>
+        <span class="add-box"><strong>原来的内容</strong></span>
+    </div>
+</body>
+
+</html>

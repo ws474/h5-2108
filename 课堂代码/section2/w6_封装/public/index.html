@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <style>
+        #goodslist img{width:100%;}
+        .logout {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark bg-dark navbar-expand-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+          <i class="bi bi-smartwatch"></i>
+          一表人才
+      </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" href="index.html">首页</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="discover.html">发现</a>
+              </li>
+      
+              <li class="nav-item">
+                <a class="nav-link" href="cart.html">购物车</a>
+              </li>
+            </ul>
+            <div class="d-flex login">
+
+                  <a class="nav-link" href="login.html">登录</a>
+                  <a class="nav-link" href="reg.html">注册</a>
+            </div>
+            <div class="d-flex logout">
+
+                  <span class="navbar-text"></span>
+                  <a class="nav-link" href="#">退出</a>
+            </div>
+          </div>
+        </div>
+  </nav>
+    <div class="container-fluid">
+        <div class="home">
+          <div id="goodslist"  class="row align-items-center"></div>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+          </nav>
+        </div>
+    </div>
+    <script src="./js/bootstrap.js"></script>
+    <script src="./utils/request.js"></script>
+    <script src="./js/common.js"></script>
+    <script>
+        const goodslist = document.querySelector('#goodslist')
+
+
+
+        // 请求数据
+        // request.get('/goods/list').then()
+        request({
+          url:'/goods/list',
+          data:{
+            size:20
+          }
+        }).then(data=>{
+          console.log('data=',data)
+
+          goodslist.innerHTML = data.data.map(item=>{
+            return `
+              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                  <a href="goods.html?id=${item._id}"><img src="${item.img_url}" /></a>
+                    <h4 class="fs-5">${item.goods_name}</h4>
+                    <p>分类：${item.category}</p>
+                    <p class="price"><del>${item.price}</del><span>${item.sales_price}</span></p>
+              </div>
+            `
+          }).join('')
+        })
+    </script>
+</body>
+
+</html>

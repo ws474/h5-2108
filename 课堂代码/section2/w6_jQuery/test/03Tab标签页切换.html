@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>12tab标签页切换</title>
+	<style>
+		.tab{border:2px solid #ddd;padding:2px;width:353px;}
+		.tab header{padding-bottom:2px;border-bottom:2px solid #ddd;overflow:hidden;}
+		.tab header div{float:left;padding:5px 15px;border-right:1px solid #ddd;}
+		.tab .active{background-color: #fc0;color:#fff;}
+		.tab .content{padding:15px;min-height: 100px;}
+	</style>
+	<script src="lib/jquery-3.2.1.js"></script>
+	<script>
+		jQuery(function($){
+			/*
+				初始化效果
+					* 隐藏除第一张以外的图片
+					* 高亮显示第一个tab
+				点击切换
+					* 重点：获取当前索引值（方法：index()）
+					* 高亮显示当前tab，去除其它高亮
+					* 显示对应图片，隐藏其它图片
+			 */
+
+			var $tab = $('.tab');
+			var $tabItem = $tab.find('header div');
+			var $content = $tab.find('.content div');
+
+			// 隐藏除第一张以外的图片
+			// $content.slice(1).hide();
+			// var $res = $content.filter(function(idx,ele){
+			// 	console.log(idx,ele);
+
+			// 	return idx>0;
+			// });
+
+			$content.not(':first').hide();
+
+			// 高亮显示第一个tab
+			$tabItem.first().addClass('active');
+
+
+			// 点击切换
+			$tab.on('mouseover','header div',function(){
+				// 获取当前索引值
+				var idx = $(this).index();
+				
+				// * 高亮显示当前tab，去除其它高亮
+				$tabItem.eq(idx).addClass('active').siblings().removeClass('active');
+
+				//* 显示对应图片，隐藏其它图片
+				$content.eq(idx).slideDown().siblings().slideUp();
+			})
+		})
+	</script>
+</head>
+<body>
+	<div class="tab">
+		<header>
+			<div>Tab1</div>
+			<div>Tab2</div>
+			<div>Tab3</div>
+			<div>Tab4</div>
+			<div>Tab5</div>
+		</header>
+		<div class="content">
+			<div><img src="img/g1.jpg"></div>
+			<div><img src="img/g2.jpg"></div>
+			<div><img src="img/g3.jpg"></div>
+			<div><img src="img/g4.jpg"></div>
+			<div><img src="img/g5.jpg"></div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品详情页面</title>
+    <link rel="stylesheet" href="./css/common.css" />
+</head>
+<body>
+    <h1>商品详情页面</h1>
+    <div id="detail">
+
+    </div>
+    <button class="add2cart">添加购物车</button>
+    <button class="buynow">立即购买</button>
+    <script src="./utils/tools.js"></script>
+    <script>
+        // 获取url地址中的id
+        // const searchParams = location.search.slice(1);
+        // const params = searchParams.split('&')
+
+        // console.log(params);
+        // const data = {}
+        // params.forEach(item=>{
+        //     const [key,value] = item.split('=')
+        //     data[key] = value;
+        // })
+        // console.log('data=',data)
+
+        const detail = document.querySelector('#detail')
+
+        const params = new URLSearchParams(location.search)
+        const id = params.get('id')
+
+        // 根据id请求商品信息
+        // request('/goods/'+id,function({data}){
+        //     console.log('data',data);
+
+        //     // 渲染商品信息到页面
+        //     detail.innerHTML = `
+        //         <img src="http://120.76.247.5:2003${data.img_url}" />
+        //         <h1>${data.goods_name}</h1>
+        //         <p>分类：${data.category}</p>
+        //         <p class="price"><del>${data.price}</del><span>${data.sales_price}</span></p>
+        //     `
+        // })
+
+        (async function(){
+            // await等待promise对象的结果
+            // 以同步的写法实现异步操作
+            const data = await ajax('/goods/'+id)
+            console.log('data=',data)
+            detail.innerHTML = `
+                <img src="http://120.76.247.5:2003${data.img_url}" />
+                <h1>${data.goods_name}</h1>
+                <p>分类：${data.category}</p>
+                <p class="price"><del>${data.price}</del><span>${data.sales_price}</span></p>
+            `
+        })();
+        
+        // const promise = ajax('/goods/'+id);
+
+        // promise.then(function({data}){
+        //     console.log('data=',data)
+        //     // 数据请求成功后，执行这里的代码
+        //     detail.innerHTML = `
+        //         <img src="http://120.76.247.5:2003${data.img_url}" />
+        //         <h1>${data.goods_name}</h1>
+        //         <p>分类：${data.category}</p>
+        //         <p class="price"><del>${data.price}</del><span>${data.sales_price}</span></p>
+        //     `
+        // })
+    </script>
+</body>
+</html>

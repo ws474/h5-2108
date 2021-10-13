@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>04.处理ajax返回数据</title>
+</head>
+<body>
+    <h1>04.处理ajax返回数据</h1>
+    用户名：<input type="text" id="username" />
+    <script>
+        /*  
+            04.处理ajax返回数据
+
+            * 注册：检测用户名是否可用
+                * 接口地址：http://120.76.247.5:2003/api/user/check
+                * 给服务器传递参数
+                    * get: 
+        */
+
+        const username = document.querySelector('#username')
+
+        // 在输入框失去焦点时进行校验
+        // username.onblur = function(){
+        //     console.log(666)
+        // }
+        // 输入框内容有修改且失去焦点时执行
+        username.onchange = function(){
+            // 获取输入的用户名
+            const name = username.value;
+            const xhr = new XMLHttpRequest(); // readyState=0
+            // xhr.onload = function(){}
+            xhr.onreadystatechange = function(){
+                // 在xhr.readyState发生改变时执行
+                console.log('readyState',xhr.readyState)
+
+                if(xhr.readyState === 1){
+                    console.log('加载中..')
+                }else if(xhr.readyState === 4){
+                    console.log('加载完成')
+                    console.log('readyState=4',xhr.responseText)
+                }
+            }
+            xhr.onload = function(){
+                console.log('onload',xhr.responseText)
+            }
+            xhr.open('get','http://120.76.247.5:2003/api/user/check?username='+name,true);// readyState=1
+            xhr.send();//// readyState=2
+            
+            
+        }
+
+        
+
+        
+    </script>
+</body>
+</html>

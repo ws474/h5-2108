@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>03表单选择器</title>
+    <script src="js/jquery-3.1.1.js"></script>
+    <script>
+        $(function(){
+            $(':submit').click(function(e){
+                
+
+                var res = '';
+
+                // 判断是否为jquery对象
+                // div.jquery;//得到版本号
+
+
+
+                // 用户名
+                res += '<p>用户名：' + $('#username').val();
+                res += '<p>昵称：' + $('#nickname').val();
+                res += '<p>密码：' + $('#password').val();
+                res += '<p>性别：' + $('#gender').val();
+                res += '<p>爱好：';
+
+                /*for(var i=0;i<$(':checkbox').length;i++){
+                    if($(':checkbox')[i].checked){
+                     res += $(':checkbox')[i].value + '，'
+                    }
+                }*/
+
+                // 过滤：获取勾选上的复选框
+                // 隐式遍历（隐式迭代）
+                var _hobby = $.map($(':checkbox').filter(':checked'),function(item,idx){
+                    return item.value;
+                });
+                res += _hobby.join();
+
+
+                res += '<p>是否已婚：';
+                /*for(var i=0;i<$(':radio').length;i++){
+                    if($(':radio')[i].checked){
+                     res += $(':radio')[i].value + '，'
+                    }
+                }*/
+
+                // 是否已婚选项
+                var _married = $(':radio').filter(':checked').val();
+                res += _married;
+
+                $('.msg').html(res);
+
+                // e.preventDefault();
+                // e.stopPropagation();
+                return false;
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <form>
+        <p>
+            <label for="username">用户名</label>
+            <input type="text" id="username" name="username" placeholder="请输入用户名">
+        </p>
+        <p>
+            <label for="nickname">昵称</label>
+            <input type="text" id="nickname" name="nickname" placeholder="输入一个昵称">
+        </p>
+        <p>
+            <label for="password">密码</label>
+            <input type="password" id="password" name="password">
+        </p>
+        <p>
+            <label for="passwordchecked">确认密码</label>
+            <input type="password" id="passwordchecked" name="passwordchecked">
+        </p>
+        <p>
+            <label for="gender">性别</label>
+            <select id="gender" name="gender">
+                <option value="男">男</option>
+                <option value="女">女</option>
+            </select>
+        </p>
+        <p>
+            <label for="">爱好</label>
+            <label>
+                <input type="checkbox" name="hobby" value="旅游">旅游</label>
+            <label>
+                <input type="checkbox" name="hobby" value="睡觉">睡觉</label>
+            <label>
+                <input type="checkbox" name="hobby" value="上网">上网</label>
+                <label>
+                <input type="checkbox" name="hobby" value="看电影">看电影</label>
+        </p>
+        <p>
+            <label for="">是否已婚</label>
+            <label>
+                <input type="radio" value="已婚" name="married">是</label>
+            <label>
+                <input type="radio" value="未婚" name="married">否</label>
+        </p>
+        <div class="center">
+            <input type="hidden" value="注册表单">
+            <input type="button" value="返回" />
+            <button type="submit">提交</button>
+            <button type="reset">重置</button>
+        </div>
+    </form>
+    <div class="msg"></div>
+</body>
+
+</html>
